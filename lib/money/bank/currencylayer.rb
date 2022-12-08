@@ -23,11 +23,11 @@ class Money
     class Currencylayer < Money::Bank::VariableExchange
       include OnTimePatch
 
-      # Host of service jsonrates
-      SERVICE_HOST = "apilayer.net"
+      # new host for currencylayer.com API
+      SERVICE_HOST = "api.apilayer.com"
 
-      # Relative path of jsonrates api
-      SERVICE_PATH = "/api/live"
+      # Relative path of Exchange api
+      SERVICE_PATH = "/currency_data/live"
 
       # accessor of access_key of jsonrates.com service
       attr_accessor :access_key

@@ -15,6 +15,14 @@ describe "Currencylayer" do
     expect(Money::Bank::Currencylayer.ttl_in_seconds).to eq(86400)
   end
 
+  describe '.build_uri' do
+    it 'includes new host and path' do
+      uri = bank.send(:build_uri, 'USD', 'EUR')
+      expect(uri.host).to eq("api.apilayer.com")
+      expect(uri.path).to eq("/currency_data/live")
+    end
+  end
+
   describe '.get_rate' do
     it 'returns rate' do
       uri = bank.send(:build_uri, 'USD', 'EUR').to_s
