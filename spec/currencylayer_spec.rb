@@ -127,4 +127,15 @@ describe "Currencylayer" do
       expect(uri.path).to eq("/currency_data/live")
     end
   end
+
+  describe '.perform_request' do
+    it 'includes auth header' do
+      uri = bank.send(:build_uri, 'USD', 'EUR')
+      stub_request(:get, uri.to_s).to_return(get_rate_USDEUR_success)
+
+      bank.flush_rates
+      expect(uri).to receive(:read).with('apikey' => bank.access_key)
+      bank.send(:perform_request, uri)
+    end
+  end
 end

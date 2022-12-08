@@ -320,10 +320,11 @@ class Money
       # Performs request on uri or raise exception message with RequestError
       #
       # @param [String] uri Requested uri
+      # @param [Hash]   apikey Access key
       #
       # @return [String]
       def perform_request(uri)
-        uri.read
+        uri.read('apikey' => access_key)
       rescue Exception => e
         raise RequestError, e.message
       end

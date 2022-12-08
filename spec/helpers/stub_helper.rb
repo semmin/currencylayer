@@ -25,4 +25,13 @@ module StubHelper
             }'
         }
     end
+
+    def get_rate_unauthorized
+        {   
+            :status => 401,
+            :body => '{
+                "message": "No API key found in request"
+            }'
+        }
+    end
 end
