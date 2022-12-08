@@ -1,4 +1,5 @@
 require 'spec_helper'
+include StubHelper
 
 describe "Currencylayer" do
   let(:bank) { Money::Bank::Currencylayer.new }
@@ -15,25 +16,16 @@ describe "Currencylayer" do
     expect(Money::Bank::Currencylayer.ttl_in_seconds).to eq(86400)
   end
 
-  describe '.build_uri' do
-    it 'includes new host and path' do
-      uri = bank.send(:build_uri, 'USD', 'EUR')
-      expect(uri.host).to eq("api.apilayer.com")
-      expect(uri.path).to eq("/currency_data/live")
-    end
-  end
-
   describe '.get_rate' do
     it 'returns rate' do
       uri = bank.send(:build_uri, 'USD', 'EUR').to_s
-      stub_request(:get, uri).to_return( :status => 200,
-        :body => '{"success":true,"terms":"https:\/\/currencylayer.com\/terms","privacy":"https:\/\/currencylayer.com\/privacy","timestamp":1434443053,"source":"USD","quotes":{"USDEUR":0.887701}}')
+      stub_request(:get, uri).to_return(get_rate_USDEUR_success)
 
       bank.flush_rates
 
       rate = bank.get_rate('USD', 'EUR')
 
-      expect(rate).to eq(BigDecimal("0.887701"))
+      expect(rate).to eq(BigDecimal("0.947553e0"))
     end
 
     context "in careful mode" do
@@ -48,7 +40,7 @@ describe "Currencylayer" do
 
         uri = bank.send(:build_uri, 'USD', 'EUR').to_s
 
-        stub_request(:get, uri).to_return(:status => 200, :body => '{"success":false,"error":{"code":202,"info":"You have provided one or more invalid Currency Codes. [Required format: currencies=EUR,USD,GBP,...]"}}')
+        stub_request(:get, uri).to_return(get_rate_USDEUR_failure)
 
         rate = bank.get_rate('USD', 'EUR')
 
@@ -125,6 +117,14 @@ describe "Currencylayer" do
         expect(bank).to_not receive(:flush_rates)
         bank.expire_rates
       end
+    end
+  end
+
+  describe '.build_uri' do
+    it 'includes new host and path' do
+      uri = bank.send(:build_uri, 'USD', 'EUR')
+      expect(uri.host).to eq("api.apilayer.com")
+      expect(uri.path).to eq("/currency_data/live")
     end
   end
 end
