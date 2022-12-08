@@ -283,7 +283,7 @@ class Money
       #
       # @return [Numeric]
       def set_rate_with_time(from, to, rate)
-        rate_d = BigDecimal.new(rate.to_s)
+        rate_d = BigDecimal(rate.to_s)
 
         self.store.transaction {
           self.store.add_rate(from, to, { rate: rate_d, created_at: Time.now })
@@ -354,7 +354,7 @@ class Money
         request_hash = JSON.parse(data)
         success = request_hash['success']
         raise RequestError, request_hash['error']['info'] unless success
-        BigDecimal.new(request_hash['quotes']["#{from}#{to}"].to_s)
+        BigDecimal(request_hash['quotes']["#{from}#{to}"].to_s)
       end
     end
   end

@@ -25,7 +25,7 @@ describe "Currencylayer" do
 
       rate = bank.get_rate('USD', 'EUR')
 
-      expect(rate).to eq(BigDecimal.new("0.887701"))
+      expect(rate).to eq(BigDecimal("0.887701"))
     end
 
     context "in careful mode" do
@@ -44,7 +44,7 @@ describe "Currencylayer" do
 
         rate = bank.get_rate('USD', 'EUR')
 
-        expect(rate).to eq(BigDecimal.new("1.011"))
+        expect(rate).to eq(BigDecimal("1.011"))
 
         Money::Bank::Currencylayer.rates_careful = false
       end
@@ -72,7 +72,7 @@ describe "Currencylayer" do
     it 'returns cached value if exception raised' do
       bank.flush_rates
       bank.add_rate("USD", "CAD", 32.231)
-      expect(bank.get_rate("USD", "CAD")).to eq (BigDecimal.new('32.231'))
+      expect(bank.get_rate("USD", "CAD")).to eq (BigDecimal('32.231'))
     end
   end
 
